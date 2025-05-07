@@ -2,7 +2,7 @@
 
 A variational autoencoder leveraging multi-omics for risk prediction in newly diagnosed multiple myeloma patients.
 
-<p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/MyeVAE/refs/heads/main/assets/myeVAE.png" alt="Illustration of MyeVAE architecture, hosted on github" width="600"></p>
+<p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/myevae/refs/heads/main/assets/myeVAE.png" alt="Illustration of MyeVAE architecture, hosted on github" width="600"></p>
 
 This Python package contains the code to train and run SHAP on MyeVAE. No GPU is required.
 
@@ -91,7 +91,7 @@ myevae shap \
 
 ## Files
 
-<p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/MyeVAE/refs/heads/main/assets/directory.png" alt="Illustration of folder structure, hosted on github" width="300"></p>
+<p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/myevae/refs/heads/main/assets/directory.png" alt="Illustration of folder structure, hosted on github" width="300"></p>
 
 
 ### Input csv files
