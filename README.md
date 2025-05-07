@@ -12,14 +12,10 @@ Install through PyPI
 ```bash
 pip install myevae[parallel]
 ```
-or through conda
-```
-conda install myevae[parallel]
-```
-
-This installation may take up to 5 minutes if you do not have PyTorch ≥ 2.0 installed in your python environment.
 
 Installing with the `[parallel]` optional dependency is highly recommended as it allows parallelization of grid search using `dask` and `distributed` backends.
+
+This installation may take up to 5 minutes if you do not have PyTorch ≥ 2.0 installed in your python environment.
 
 # Step-by-step guide
 
