@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myevae-test"
+authors = [
+  { name = "Chang Jia Geng" },
+  { name = "Jianbin Chen" },
+  { name = "Guo-Liang Chew" },
+  { name = "Wee Joo Chng" },
+]
+maintainers = [
+  { name="Chang Jia Geng", email="jiageng1997@gmail.com" },
+]
+description = "A variational autoencoder that leverages multiomics for cancer risk prediction"
+readme = {file = "README.md", content-type = "text/markdown" }
+dynamic = ["version"]
+requires-python = ">=3.8"
+dependencies = [
+    "torch>=1.9.0",
+    "scikit-survival>=0.17.1", 
+    "scikit-learn>=0.24.1",
+    "importlib_resources",
+    "matplotlib",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+    "multiomics", "myeloma", "VAE", "variational autoencoder", "omics integration", "command line tool", "jiageng"
+]
+
+[project.scripts]
+myevae = "myevae:myevae_main"
+
+[tool.setuptools.package-data]
+myevae = [
+    "data/ensembl_ref.csv",
+]
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[project.optional-dependencies]
+parallel = [
+    "dask[distributed]", 
+]
+
+[project.urls]
+Homepage = "https://github.com/JiaGengChang/myevae"
+Repository = "https://github.com/JiaGengChang/myevae.git"
+Issues = "https://github.com/JiaGengChang/myevae/issues"
+Example-Inputs = "https://myevae.s3.us-east-1.amazonaws.com/example-input-data/"
+Example-Outputs = "https://myevae.s3.us-east-1.amazonaws.com/example-outputs/"
