@@ -9,14 +9,10 @@ This Python package contains the code to train and run SHAP on MyeVAE. No GPU is
 
 # Install
 
-Install through PyPI
+Install through PyPI (requires **Python 3.9** or later)
 ```bash
-pip install myevae[parallel]
+pip install myevae
 ```
-
-Installing with the `[parallel]` optional dependency is highly recommended as it allows parallelization of grid search using `dask` and `distributed` backends.
-
-This installation may take up to 5 minutes if you do not have PyTorch ≥ 2.0 installed in your python environment.
 
 # Step-by-step guide
 
@@ -142,16 +138,16 @@ param_grid = {
 ## Software
 These dependencies will be automatically installed.
 ```
-python >= 3.8
+python >= 3.9
 torch >= 1.9.0
 scikit-learn >= 0.24.1
-scikit-survival >= 0.17.1
+scikit-survival >= 0.23.1
 importlib_resources
 matplotlib
-git+https://github.com/JiaGengChang/shap.git
+shap-0.47.3.dev8-offline-fork-for-myevae==0.0.1
 ```
 
-The last dependency is a forked version of shap/shap which works for MyeVAE. Due to its multi-modal nature, MyeVAE takes a list of tensors as input rather than a single tensor. Hence, the original shap will not work.
+The last dependency is a offline fork of shap (https://pypi.org/project/shap/) which has been modified to work MyeVAE.
 
 
 ## Recommended hardware
