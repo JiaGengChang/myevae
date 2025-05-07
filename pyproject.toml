@@ -1,12 +1,10 @@
 [build-system]
-requires = ["setuptools>=41", "wheel", "setuptools-git-versioning>=2.0,<3",]
+requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools-git-versioning]
-enabled = true
 
 [project]
 name = "myevae2"
+version = "0.0.2"
 authors = [
   { name = "Chang Jia Geng" },
   { name = "Jianbin Chen" },
@@ -16,9 +14,8 @@ authors = [
 maintainers = [
   { name="Chang Jia Geng", email="jiageng1997@gmail.com" },
 ]
-description = "A variational autoencoder that leverages multiomics for cancer risk prediction"
+description = "MyeVAE: a multi-modal variational autoencoder for risk profiling of newly diagnosed multiple myeloma"
 readme = {file = "README.md", content-type = "text/markdown" }
-dynamic = ["version"]
 requires-python = ">=3.8"
 dependencies = [
     "torch>=1.9.0",
@@ -47,7 +44,7 @@ classifiers = [
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = [
-    "multiomics", "myeloma", "VAE", "variational autoencoder", "omics integration", "command line tool", "jiageng"
+    "multiomics", "myeloma", "VAE", "variational autoencoder", "omics integration", "command line tool"
 ]
 
 [project.scripts]
