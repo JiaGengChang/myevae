@@ -27,11 +27,13 @@ Installing with the `[parallel]` optional dependency is highly recommended as it
 
 Download the raw multi-omics dataset and example outputs from the following link:
 
-1. Input datasets are stored at https://myevae.s3.us-east-1.amazonaws.com/example-input-data/. 
+1. Input datasets are stored at https://myevae.s3.us-east-1.amazonaws.com/example_inputs.tar.gz
 
-2. Example output files are stored at https://myevae.s3.us-east-1.amazonaws.com/example-outputs/.
+2. Example output files are stored at https://myevae.s3.us-east-1.amazonaws.com/example_outputs.tar.gz
 
-Please use the two links sparingly.
+Please use the download links sparingly.
+
+If you use the AWS S3 CLI, the bucket ARN is `arn:aws:s3:::myevae` - you can list its contents and download specific files.
 
 ## 2. (Optional) Feature preprocessing
 
@@ -45,7 +47,7 @@ myevae preprocess \
 
 Processed files will be stored in `train_features_[os|pfs]_processed.csv` and `valid_features_[os|pfs]_processed.csv`.
 
-Preprocessing of features is resource-intensive. Alternatively, proceed to step 3 using the processed features in the example input data (https://myevae.s3.us-east-1.amazonaws.com/example-input-data/).
+Preprocessing of features is resource-intensive. Alternatively, proceed to step 3 using the processed features in the example input data (https://myevae.s3.us-east-1.amazonaws.com/example_inputs.tar.gz).
 
 ```
 train_features_os_processed.csv
