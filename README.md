@@ -1,4 +1,5 @@
 # MyeVAE
+[![PyPI version](https://badge.fury.io/py/myevae.svg)](https://badge.fury.io/py/myevae)
 
 A variational autoencoder leveraging multi-omics for risk prediction in newly diagnosed multiple myeloma patients.
 
