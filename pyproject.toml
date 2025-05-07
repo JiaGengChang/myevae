@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 enabled = true
 
 [project]
-name = "myevae-test"
+name = "myevae2"
 authors = [
   { name = "Chang Jia Geng" },
   { name = "Jianbin Chen" },
@@ -67,7 +67,8 @@ parallel = [
 
 [project.urls]
 Homepage = "https://github.com/JiaGengChang/myevae"
-Repository = "https://github.com/JiaGengChang/myevae.git"
+Software-Repo = "https://github.com/JiaGengChang/myevae.git"
+Publication-Repo = "https://github.com/JiaGengChang/myevae-paper.git"
 Issues = "https://github.com/JiaGengChang/myevae/issues"
-Example-Inputs = "https://myevae.s3.us-east-1.amazonaws.com/example-input-data/"
-Example-Outputs = "https://myevae.s3.us-east-1.amazonaws.com/example-outputs/"
+Example-Inputs = "https://myevae.s3.us-east-1.amazonaws.com/example_inputs.tar.gz"
+Example-Outputs = "https://myevae.s3.us-east-1.amazonaws.com/example_outputs.tar.gz"
