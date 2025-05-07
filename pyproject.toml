@@ -1,8 +1,7 @@
 [build-system]
-requires = ["setuptools>=41", "wheel", "setuptools_scm"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools_scm]
 
 [project]
 name = "myevae2"
@@ -52,13 +51,6 @@ keywords = [
 [project.scripts]
 myevae = "myevae:myevae_main"
 
-[tool.setuptools.package-data]
-myevae = [
-    "data/ensembl_ref.csv",
-]
-[tool.setuptools.dynamic]
-dependencies = {file = "requirements.txt"}
-
 [project.optional-dependencies]
 parallel = [
     "dask[distributed]", 
@@ -71,3 +63,13 @@ Publication-Repo = "https://github.com/JiaGengChang/myevae-paper.git"
 Issues = "https://github.com/JiaGengChang/myevae/issues"
 Example-Inputs = "https://myevae.s3.us-east-1.amazonaws.com/example_inputs.tar.gz"
 Example-Outputs = "https://myevae.s3.us-east-1.amazonaws.com/example_outputs.tar.gz"
+
+[tool.setuptools.package-data]
+myevae = [
+    "data/ensembl_ref.csv",
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = "requirements.txt"}
+
+[tool.setuptools_scm]
