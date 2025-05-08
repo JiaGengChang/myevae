@@ -1,23 +1,34 @@
 # MyeVAE
-[![PyPI version](https://badge.fury.io/py/myevae.svg)](https://badge.fury.io/py/myevae)
-[![GitHub version](https://badge.fury.io/gh/JiaGengChang%2Fmyevae.svg)](https://badge.fury.io/gh/JiaGengChang%2Fmyevae)
 
-A variational autoencoder leveraging multi-omics for risk prediction in newly diagnosed multiple myeloma patients.
+[![PyPI version](https://badge.fury.io/py/myevae.svg)](https://badge.fury.io/py/myevae)
+[![GitHub latest commit](https://badgen.net/github/last-commit/JiaGengChang/myevae)](https://GitHub.com/JiaGengChang/myevae/commit/)
+[![GitHub license](https://img.shields.io/github/license/JiaGengChang/myevae.svg)](https://github.com/JiaGengChang/myevae/blob/master/LICENSE)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+
+MyeVAE is a variational autoencoder leveraging multi-omics for risk prediction in newly diagnosed multiple myeloma patients.
+
+This repository contains the Python source code to preprocess multimoodal features, train MyeVAE, score its performance, and perform SHAP analysis. 
+
+All computation is done on the CPU, using the PyTorch library.
 
 <p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/myevae/refs/heads/main/assets/myeVAE.png" alt="Illustration of MyeVAE architecture, hosted on github" width="600"></p>
 
-This Python package contains the code to train and run SHAP on MyeVAE. No GPU is required.
+# Setup
 
-# Install
+## Install MyeVAE
+Requires **Python 3.9** or later
 
-Install through PyPI (requires **Python 3.9** or later)
+Install through PyPI 
 ```bash
 pip install myevae
 ```
 
-# Step-by-step guide
+Install through github
+```bash
+pip install git+https://github.com/JiaGengChang/myevae.git
+```
 
-## 1. Download data
+## Download data
 
 Download the raw multi-omics dataset and example outputs from the following link:
 
@@ -29,7 +40,8 @@ Please use the download links sparingly.
 
 If you use the AWS S3 CLI, the bucket ARN is `arn:aws:s3:::myevae` - you can list its contents and download specific files.
 
-## 2. (Optional) Feature preprocessing
+# Step-by-step guide
+## 1. (Optional) Feature preprocessing
 
 As there are over 50,000 raw features and contains missing values, this step performs supervised-feature selection, scaling, and imputation.
 
@@ -39,18 +51,19 @@ myevae preprocess \
     -i [/inputs/folder]
 ```
 
-Processed files will be stored in `train_features_[os|pfs]_processed.csv` and `valid_features_[os|pfs]_processed.csv`.
-
-Preprocessing of features is resource-intensive. Alternatively, proceed to step 3 using the processed features in the example input data (https://myevae.s3.us-east-1.amazonaws.com/example_inputs.tar.gz).
-
-```
-train_features_os_processed.csv
-train_features_pfs_processed.csv
-valid_features_os_processed.csv
-valid_features_pfs_processed.csv
+The following output files will be created in the same directory as the inputs.
+```bash
+inputs
+├──train_features_os_processed.csv
+├──train_features_pfs_processed.csv
+├──valid_features_os_processed.csv
+└──valid_features_pfs_processed.csv
 ```
 
-## 3. Fit model
+Preprocessing of features is resource-intensive. Alternatively, proceed to step 3 using the downloaded processed features.
+
+
+## 2. Fit model
 
 Place the hyperparameter grid (`param_grid.py`) in `/params/folder`.
 
@@ -64,7 +77,7 @@ myevae train \
     -o [/output/folder]
 ```
 
-## 4. Score model
+## 3. Score model
 
 ```bash
 myevae score \
@@ -74,7 +87,7 @@ myevae score \
     -o [/output/folder]
 ```
 
-## 5. Generate SHAP plots
+## 4. Generate SHAP plots
 ```bash
 myevae shap \
     -e [endpoint: os | pfs] \
@@ -93,15 +106,15 @@ myevae shap \
 ### Input csv files
 Place the following `.csv` files inside your inputs folder (`/inputs/folder`), and the `param_grid.py` inside your preferred folder. Also create an empty folder for the outputs.
 ```bash
-|-----/inputs
-|     |----train_features.csv [ feature matrix of training samples ]
-|     |----valid_features.csv [ feature matrix of validation samples ]
-|     |----train_labels.csv [ survival files of training samples ]
-|     |____valid_labels.csv [ survival files of validation samples ]
-|-----/params
-|     |____param_grid.py
-|_____/output
-      |____[output files created here]
+├──inputs
+│     ├──train_features.csv [ feature matrix of training samples ]
+│     ├──valid_features.csv [ feature matrix of validation samples ]
+│     ├──train_labels.csv [ survival files of training samples ]
+│     └──valid_labels.csv [ survival files of validation samples ]
+├──params
+│     └──param_grid.py
+└──outputs
+      └──[output files created here]
 ```
 
 For `features*.csv` and `labels*.csv`, column 0 is read in as the index, which should be the patient IDs.
@@ -109,9 +122,13 @@ For `features*.csv` and `labels*.csv`, column 0 is read in as the index, which s
 Example input csv files can be downloaded from AWS S3 link above.
 
 ### Hyperparameter grid python file
-Place a python file named `param_grid.py` containing the hyperparameter grid dictionary in the params folder (`/params/folder`). This contains the set of hyperparameters that grid search will be performed on. Otherwise, use the default provided in `src/param_grid.py`.
+Place a python file named `param_grid.py` containing the hyperparameter grid dictionary in the params folder (`/params`). 
 
-The example parameter grid provides 3 options for z_dim (dimension of latent space): 8, 16, or 32:
+This contains the set of hyperparameters that grid search will be performed on. 
+
+Otherwise, use the default provided in `src/param_grid.py`.
+
+The default hyperparameter grid is only meant for testing purposes:
 ```python
 from torch.nn import LeakyReLU, Tanh
 
@@ -136,6 +153,8 @@ param_grid = {
 }
 ```
 
+An actual paramater grid is available at https://myevae.s3.us-east-1.amazonaws.com/param_grid.py
+
 ## Software
 These dependencies will be automatically installed.
 ```
@@ -159,14 +178,9 @@ The last dependency is a offline fork of shap (https://pypi.org/project/shap/) w
 
 No GPU is required.
 
-Total CPU time for feature preprocessing: ~24 hours
-
-Total CPU time for training: ~2 minutes per model (no GPU required)
-
 
 # Citation
 
-If you use MyeVAE in your research, please cite the authors:
-```
-[Manuscript under review. Contact author at changjiageng@u.nus.edu for citation.]
-```
+If you use MyeVAE in your research, please consider citing:
+
+Jia Geng Chang, Jianbin Chen, Guo-Liang Chew, Wee Joo Chng. *MyeVAE: a multi-modal variational autoencoder for risk profiling of newly diagnosed multiple myeloma*. 2 May 2025. Manuscript under review.
