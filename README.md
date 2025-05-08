@@ -45,6 +45,10 @@ If you use the AWS S3 CLI, the bucket ARN is `arn:aws:s3:::myevae` - you can lis
 
 As there are over 50,000 raw features and contains missing values, this step performs supervised-feature selection, scaling, and imputation.
 
+For feature selection, elastic net regularized Cox proportional hazards is used.
+
+For imputation, round-robin imputation with scikit-learn IterativeImputer is used, with random forest regressor and classifier as based estimators.
+
 ```bash
 myevae preprocess \
     -e [endpoint: os | pfs] \
@@ -53,19 +57,24 @@ myevae preprocess \
 
 The following output files will be created in the same directory as the inputs.
 ```bash
-inputs
-├──train_features_os_processed.csv
-├──train_features_pfs_processed.csv
-├──valid_features_os_processed.csv
-└──valid_features_pfs_processed.csv
+project
+└──inputs
+    ├──...
+    ├──train_features_os_processed.csv
+    ├──train_features_pfs_processed.csv
+    ├──valid_features_os_processed.csv
+    └──valid_features_pfs_processed.csv
 ```
 
-Preprocessing of features is resource-intensive. Alternatively, proceed to step 3 using the downloaded processed features.
+Preprocessing of features as computationally expensive than hyperparameter tuning. On 10 cores and 64GB RAM, it uses a wall time of **~12 hours**.
 
+Alternatively, if you are just testing this package, you may use pre-processed features from the S3 bucket link and proceed to the next step.
 
 ## 2. Fit model
 
-Place the hyperparameter grid (`param_grid.py`) in `/params/folder`.
+See [requirements](#requirements) for the required files before training.
+
+Basically, you need to place the processed features and labels in `/inputs/folder`, and create a hyperparameter file named `param_grid.py` in `/params/folder`. See [this section](#3-hyperparameter-file) for the default hyperparamter grid.
 
 ```bash
 myevae train \
@@ -77,6 +86,10 @@ myevae train \
     -o [/output/folder]
 ```
 
+If the hyperparameter file is not specified, the default will be used (`/src/myevae/param_grid.py`), the process should take only **5 minutes**. 
+
+With an actual hyperparameter grid, the training can take up to **12 hours**.
+
 ## 3. Score model
 
 ```bash
@@ -87,7 +100,9 @@ myevae score \
     -o [/output/folder]
 ```
 
-## 4. Generate SHAP plots
+Model scoring should be done in under **a minute**.
+
+## 4. SHAP analysis
 ```bash
 myevae shap \
     -e [endpoint: os | pfs] \
@@ -96,21 +111,42 @@ myevae shap \
     -o [/output/folder]
 ```
 
-# Requirements
+Approximation of SHAP values and generation of summary plots should take **1-2 minutes**.
 
-## Files
+## End result
+For a model named "default", the final output should look something like this. 
 
 <p align="left"><img src="https://raw.githubusercontent.com/JiaGengChang/myevae/refs/heads/main/assets/directory.png" alt="Illustration of folder structure, hosted on github" width="300"></p>
 
+Validation scores and best parameters can be found in the `.json` files. The `.pth` files are model weights.
 
-### Input csv files
+# Requirements
+
+## 1. Raw features
+Required for [preprocessing](#1-optional-feature-preprocessing) only.
+
+Place the following `.csv` files in the inputs folder:
+```bash
+project
+└──inputs
+    ├──train_features_os_processed.csv
+    ├──valid_features_os_processed.csv
+    └──train_labels.csv
+```
+
+Note the preprocessing does not use valid labels (`valid_labels.csv`), but it is fine if the file is in the directory.
+
+## 2. Processed features
+Required for [training](#2-fit-model), [scoring](#3-score-model) and [shap analysis](#4-shap-analysis)
+
 Place the following `.csv` files inside your inputs folder (`/inputs/folder`), and the `param_grid.py` inside your preferred folder. Also create an empty folder for the outputs.
 ```bash
+project
 ├──inputs
-│     ├──train_features.csv [ feature matrix of training samples ]
-│     ├──valid_features.csv [ feature matrix of validation samples ]
-│     ├──train_labels.csv [ survival files of training samples ]
-│     └──valid_labels.csv [ survival files of validation samples ]
+│     ├──train_features_os_processed.csv
+│     ├──valid_features_os_processed.csv
+│     ├──train_labels.csv
+│     └──valid_labels.csv
 ├──params
 │     └──param_grid.py
 └──outputs
@@ -121,14 +157,15 @@ For `features*.csv` and `labels*.csv`, column 0 is read in as the index, which s
 
 Example input csv files can be downloaded from AWS S3 link above.
 
-### Hyperparameter grid python file
-Place a python file named `param_grid.py` containing the hyperparameter grid dictionary in the params folder (`/params`). 
+## 3. Hyperparameter file
+Required for [training](#2-fit-model) only.
+
+Place a python file named `param_grid.py` containing the hyperparameter grid dictionary in the params folder (specified with `-p`). 
 
 This contains the set of hyperparameters that grid search will be performed on. 
 
-Otherwise, use the default provided in `src/param_grid.py`.
+Otherwise, use the default provided in `src/myevae/param_grid.py`. This default hyperparameter grid is only meant for testing purposes:
 
-The default hyperparameter grid is only meant for testing purposes:
 ```python
 from torch.nn import LeakyReLU, Tanh
 
@@ -153,7 +190,9 @@ param_grid = {
 }
 ```
 
-An actual paramater grid is available at https://myevae.s3.us-east-1.amazonaws.com/param_grid.py
+An actual paramater file is available at https://myevae.s3.us-east-1.amazonaws.com/param_grid.py
+
+Using the actual hyperparameter file, the training time will be significantly longer (~12 hours)
 
 ## Software
 These dependencies will be automatically installed.
